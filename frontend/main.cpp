@@ -10,5 +10,5 @@ Main::Main(QWidget *parent) :
 
 Main::~Main()
 {
-    delete ui;
+    delete ui
 }
