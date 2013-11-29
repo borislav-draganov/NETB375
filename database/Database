@@ -1,0 +1,176 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: BookRepository; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE "BookRepository" WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Bulgarian_Bulgaria.1251' LC_CTYPE = 'Bulgarian_Bulgaria.1251';
+
+
+ALTER DATABASE "BookRepository" OWNER TO postgres;
+
+\connect "BookRepository"
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: BookRepository; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE "BookRepository" IS 'A Publication Database.';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = true;
+
+--
+-- Name: Books; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE "Books" (
+    "Title" character varying(50),
+    "Author" character varying(50),
+    "Magazine" character varying(50),
+    "Year Published" integer,
+    "Pages" integer,
+    "ISBN" character varying(13) NOT NULL,
+    "Keywords" text[]
+);
+
+
+ALTER TABLE public."Books" OWNER TO postgres;
+
+--
+-- Name: TABLE "Books"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON TABLE "Books" IS 'A table storing the data on books.';
+
+
+--
+-- Name: COLUMN "Books"."Title"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN "Books"."Title" IS 'A Column that stores the Titles of Books.';
+
+
+--
+-- Name: COLUMN "Books"."Author"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN "Books"."Author" IS 'A Column that stores the Authors'' name.';
+
+
+--
+-- Name: COLUMN "Books"."Magazine"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN "Books"."Magazine" IS 'A Column that stores the Magazine the publication first appeared in. (?)';
+
+
+--
+-- Name: COLUMN "Books"."Year Published"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN "Books"."Year Published" IS 'A Column that Stores the Year the Book was published';
+
+
+--
+-- Name: COLUMN "Books"."Pages"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN "Books"."Pages" IS 'A Column that stores the number of pages in a book.';
+
+
+--
+-- Name: COLUMN "Books"."ISBN"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN "Books"."ISBN" IS 'A Column that stores the ISBN of a Book.';
+
+
+--
+-- Name: COLUMN "Books"."Keywords"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN "Books"."Keywords" IS 'A Column That Stores Keywords in an Array.';
+
+
+--
+-- Data for Name: Books; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY "Books" ("Title", "Author", "Magazine", "Year Published", "Pages", "ISBN", "Keywords") FROM stdin;
+\.
+
+
+--
+-- Name: Primary Key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY "Books"
+    ADD CONSTRAINT "Primary Key" PRIMARY KEY ("ISBN");
+
+
+--
+-- Name: Unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY "Books"
+    ADD CONSTRAINT "Unique" UNIQUE ("ISBN");
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- Name: Books; Type: ACL; Schema: public; Owner: postgres
+--
+
+REVOKE ALL ON TABLE "Books" FROM PUBLIC;
+REVOKE ALL ON TABLE "Books" FROM postgres;
+GRANT ALL ON TABLE "Books" TO postgres;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
