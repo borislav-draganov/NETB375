@@ -1,10 +1,10 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2013-11-26T16:40:17
+# Project created by QtCreator 2013-12-01T11:18:18
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        main.cpp
+        mainwindow.cpp \
+    insertwindow.cpp
 
-HEADERS  += main.h
+HEADERS  += mainwindow.h \
+    insertwindow.h
 
-FORMS    += main.ui
+FORMS    += mainwindow.ui

@@ -1,0 +1,5 @@
+HostName: 127.0.0.1
+Port: 5432
+DatabaseName: test
+UserName: postgres
+Password: postgres
