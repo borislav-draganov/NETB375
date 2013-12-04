@@ -90,7 +90,8 @@ QSqlDatabase MainWindow::connectDB() {
     file.close();
 
     if(!db.open()) {
-        throw QString("Could not open a connection to the database!");
+        //throw QString("Could not open a connection to the database!");
+        throw QString(db.lastError().text());
     }
 
     return db;
