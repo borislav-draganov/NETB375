@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent){
 
     // Create and set a grid layout
-    QGridLayout *mainLayout = new QGridLayout;
+    QGridLayout *mainLayout = new QGridLayout(this);
     setLayout(mainLayout);
     resize(200, 300);
 
@@ -40,7 +40,6 @@ void MainWindow::insertNew() {
         // Connect to the closing event of that window
         connect(new_item, SIGNAL(closedSignal()), this, SLOT(close_insert()));
     }
-    QSqlDatabase db = connectDB();db.close();
 }
 
 // Close the "Insert" window
@@ -54,8 +53,7 @@ QSqlDatabase MainWindow::connectDB() {
 
     QFile file("config.txt");
     if (!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Could not open DB config file"));
-        QApplication::quit();
+        throw QString("Could not open DB config file!");
     }
 
     QTextStream config_file(&file);
@@ -90,7 +88,10 @@ QSqlDatabase MainWindow::connectDB() {
 
     // Close the file and open a connection
     file.close();
-    db.open();
+
+    if(!db.open()) {
+        throw QString("Could not open a connection to the database!");
+    }
 
     return db;
 }

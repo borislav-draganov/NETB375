@@ -8,7 +8,7 @@
 insertWindow::insertWindow() {
 
     // Create and set a grid layout
-    QGridLayout *insertLayout = new QGridLayout;
+    QGridLayout *insertLayout = new QGridLayout(this);
     setLayout(insertLayout);
     resize(200, 500);
 
@@ -42,31 +42,31 @@ insertWindow::insertWindow() {
     insertLayout->addWidget(l_keywords, 6, 0);
 
     // Instantiate the Line Edits
-    t_title = new QLineEdit();
+    t_title = new QLineEdit(this);
     t_title->show();
     insertLayout->addWidget(t_title, 0, 1);
 
-    t_author = new QLineEdit();
+    t_author = new QLineEdit(this);
     t_author->show();
     insertLayout->addWidget(t_author, 1, 1);
 
-    t_magazine = new QLineEdit();
+    t_magazine = new QLineEdit(this);
     t_magazine->show();
     insertLayout->addWidget(t_magazine, 2, 1);
 
-    t_year = new QLineEdit();
+    t_year = new QLineEdit(this);
     t_year->show();
     insertLayout->addWidget(t_year, 3, 1);
 
-    t_pages = new QLineEdit();
+    t_pages = new QLineEdit(this);
     t_pages->show();
     insertLayout->addWidget(t_pages, 4, 1);
 
-    t_isbn = new QLineEdit();
+    t_isbn = new QLineEdit(this);
     t_isbn->show();
     insertLayout->addWidget(t_isbn, 5, 1);
 
-    t_keywords = new QLineEdit();
+    t_keywords = new QLineEdit(this);
     t_keywords->show();
     insertLayout->addWidget(t_keywords, 6, 1);
 
@@ -85,11 +85,18 @@ insertWindow::insertWindow() {
 }
 
 void insertWindow::sumbit() {
-    QSqlDatabase db = MainWindow::connectDB();
+    try {
+        QSqlDatabase db = MainWindow::connectDB();
 
-    QSqlQuery query = db.exec("INSERT INTO users VALUES(4, 'DDD')");
+        // TODO: put the inser query here
 
-    db.close();
+        db.close();
+
+        emit closedSignal();
+    }
+    catch(QString Err) {
+        QMessageBox::critical(NULL, QObject::tr("Error"), Err);
+    }
 }
 
 // Emit a closedSignal
