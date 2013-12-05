@@ -44,18 +44,18 @@ searchWindow::searchWindow()
     model = new QSqlQueryModel(this);
     output = new QTableView(this);
     output->setModel(model);
-    searchLayout->addWidget(output, 0, 2, 3, 2);
+    searchLayout->addWidget(output, 3, 0, 3, 4);
 
     // Instantiate the Push Buttons
     goButton = new QPushButton(this);
     goButton->setText("GO!");
     goButton->show();
-    searchLayout->addWidget(goButton, 3, 0);
+    searchLayout->addWidget(goButton, 6, 0);
 
     s_cancelButton = new QPushButton(this);
     s_cancelButton->setText("Cancel");
     s_cancelButton->show();
-    searchLayout->addWidget(s_cancelButton, 3, 1, 1, 1);
+    searchLayout->addWidget(s_cancelButton, 6, 2);
 
     // Connect Slots
     connect(goButton, SIGNAL(clicked()), this, SLOT(go()));
@@ -68,7 +68,7 @@ void searchWindow::go()
     {
         QSqlDatabase db = MainWindow::connectDB();
 
-        // TODO: put the search query here
+        model->setQuery("SELECT name, population FROM cities;");
 
         db.close();
 
@@ -81,6 +81,12 @@ void searchWindow::go()
 }
 
 void searchWindow::s_cancel()
+{
+    emit closedSignal();
+}
+
+// Emit a closedSignal
+void searchWindow::closeEvent(QCloseEvent *event)
 {
     emit closedSignal();
 }
