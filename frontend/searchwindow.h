@@ -26,6 +26,9 @@ public slots:
 signals:
     void closedSignal();
 
+protected:
+    void closeEvent(QCloseEvent *event);    // An event which is called when the window is closed
+
 private:
     QRadioButton *author;
     QRadioButton *title;
