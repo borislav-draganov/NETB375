@@ -17,11 +17,11 @@ public:
     QPushButton *cancelButton;
 
 public slots:
-    void sumbit();
+    void submit();
     void cancel();
 
 signals:
-    void closedSignal();                    // A singal that is emited when the windows is closed
+    void closedSignal();                    // A singal that is emited when the window is closed
 
 protected:
     void closeEvent(QCloseEvent *event);    // An event which is called when the window is closed

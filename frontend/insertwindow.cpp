@@ -7,7 +7,7 @@
 
 insertWindow::insertWindow() {
 
-    // Create and set a grid layout
+    // Create and set a Grid Layout
     QGridLayout *insertLayout = new QGridLayout(this);
     setLayout(insertLayout);
     resize(200, 500);
@@ -79,12 +79,12 @@ insertWindow::insertWindow() {
     cancelButton->show();
     insertLayout->addWidget(cancelButton, 7, 1);
 
-    // Connect slots
-    connect(submitButton, SIGNAL(clicked()), this, SLOT(sumbit()));
+    // Connect Slots
+    connect(submitButton, SIGNAL(clicked()), this, SLOT(submit()));
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
 }
 
-void insertWindow::sumbit() {
+void insertWindow::submit() {
     try {
         QSqlDatabase db = MainWindow::connectDB();
 
