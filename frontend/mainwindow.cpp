@@ -25,15 +25,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Connect to the slots
     connect(insertButton, SIGNAL(clicked()), this, SLOT(insertNew()));
+    connect(searchButton, SIGNAL(clicked()), this, SLOT(searchNew()));
 
-    // Nullify the pointer
+    // Nullify the pointers
     new_item = NULL;
+    new_search = NULL;
 }
 
 // Opens a new window to insert new data in the database
-void MainWindow::insertNew() {
+void MainWindow::insertNew()
+{
     // Open a window only if there isn't one already
-    if(!new_item) {
+    if(!new_item)
+    {
         new_item = new insertWindow;
         new_item->show();
 
@@ -43,9 +47,31 @@ void MainWindow::insertNew() {
 }
 
 // Close the "Insert" window
-void MainWindow::close_insert() {
+void MainWindow::close_insert()
+{
     delete new_item;
     new_item = NULL;
+}
+
+// Opens a new window to search for data in the database
+void MainWindow::searchNew()
+{
+    // Open a window only if there isn't one already
+    if (!new_search)
+    {
+        new_search = new searchWindow;
+        new_search->show();
+
+        // Connet to the closing event of that window
+        connect(new_search, SIGNAL(closedSignal()), this, SLOT(close_search()));
+    }
+}
+
+// Close the "Search" window
+void MainWindow::close_search()
+{
+    delete new_search;
+    new_search = NULL;
 }
 
 QSqlDatabase MainWindow::connectDB() {
