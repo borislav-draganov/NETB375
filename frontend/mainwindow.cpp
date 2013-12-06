@@ -15,11 +15,13 @@ MainWindow::MainWindow(QWidget *parent) :
     resize(200, 300);
 
     // Instantiate the buttons
-    insertButton = new QPushButton(tr("&Insert"));
+    insertButton = new QPushButton(this);
+    insertButton->setText("Insert");
     insertButton->show();
     mainLayout->addWidget(insertButton, 0, 0);
 
-    searchButton = new QPushButton(tr("&Search"));
+    searchButton = new QPushButton(this);
+    searchButton->setText(tr("Search"));
     searchButton->show();
     mainLayout->addWidget(searchButton, 1, 0);
 
@@ -78,7 +80,7 @@ QSqlDatabase MainWindow::connectDB() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
 
     QFile file("config.txt");
-    if (!file.open(QIODevice::ReadOnly)) {
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         throw QString("Could not open DB config file!");
     }
 

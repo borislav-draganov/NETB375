@@ -13,31 +13,38 @@ insertWindow::insertWindow() {
     resize(200, 500);
 
     // Instantiate the Labels
-    l_title = new QLabel(tr("Title:"));
+    l_title = new QLabel(this);
+    l_title->setText(tr("Title:"));
     l_title->show();
     insertLayout->addWidget(l_title, 0, 0);
 
-    l_author = new QLabel(tr("Author:"));
+    l_author = new QLabel(this);
+    l_author->setText(tr("Author:"));
     l_author->show();
     insertLayout->addWidget(l_author, 1, 0);
 
-    l_magazine = new QLabel(tr("Magazine:"));
+    l_magazine = new QLabel(this);
+    l_magazine->setText(tr("Magazine:"));
     l_magazine->show();
     insertLayout->addWidget(l_magazine, 2, 0);
 
-    l_year = new QLabel(tr("Year:"));
+    l_year = new QLabel(this);
+    l_year->setText(tr("Year:"));
     l_year->show();
     insertLayout->addWidget(l_year, 3, 0);
 
-    l_pages = new QLabel(tr("Pages:"));
+    l_pages = new QLabel(this);
+    l_pages->setText(tr("Pages:"));
     l_pages->show();
     insertLayout->addWidget(l_pages, 4, 0);
 
-    l_isbn = new QLabel(tr("ISBN:"));
+    l_isbn = new QLabel(this);
+    l_isbn->setText(tr("ISBN:"));
     l_isbn->show();
     insertLayout->addWidget(l_isbn, 5, 0);
 
-    l_keywords = new QLabel(tr("Keywords:"));
+    l_keywords = new QLabel(this);
+    l_keywords->setText(tr("Keywords:"));
     l_keywords->show();
     insertLayout->addWidget(l_keywords, 6, 0);
 
@@ -71,11 +78,13 @@ insertWindow::insertWindow() {
     insertLayout->addWidget(t_keywords, 6, 1);
 
     // Instantiate the Buttons
-    submitButton = new QPushButton(tr("Submit"));
+    submitButton = new QPushButton(this);
+    submitButton->setText(tr("Submit"));
     submitButton->show();
     insertLayout->addWidget(submitButton, 7, 0);
 
-    cancelButton = new QPushButton(tr("Cancel"));
+    cancelButton = new QPushButton(this);
+    cancelButton->setText(tr("Cancel"));
     cancelButton->show();
     insertLayout->addWidget(cancelButton, 7, 1);
 

@@ -68,11 +68,9 @@ void searchWindow::go()
     {
         QSqlDatabase db = MainWindow::connectDB();
 
-        model->setQuery("SELECT name, population FROM cities;");
+        model->setQuery("SELECT * FROM users;");
 
         db.close();
-
-        emit closedSignal();
     }
     catch(QString Err)
     {
