@@ -68,7 +68,7 @@ void searchWindow::go()
     {
         QSqlDatabase db = MainWindow::connectDB();
 
-        model->setQuery("SELECT * FROM users;");
+        model->setQuery("SELECT * FROM \"Books\";");
 
         db.close();
     }

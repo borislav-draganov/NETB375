@@ -95,12 +95,27 @@ insertWindow::insertWindow() {
 
 void insertWindow::submit() {
     try {
+        // Attempt to connect to the database and make a query
         QSqlDatabase db = MainWindow::connectDB();
+        QSqlQuery query(db);
 
-        // TODO: put the inser query here
+        // Prepare the Query
+        query.prepare("SELECT * from fillBook(:title, :author, :magazine, :year, :pages, :isbn, :keywords);");
 
+        // Bind the values
+        query.bindValue(":title", t_title->text());
+        query.bindValue(":author", t_author->text());
+        query.bindValue(":magazine", t_magazine->text());
+        query.bindValue(":year", t_year->text());
+        query.bindValue(":pages", t_pages->text());
+        query.bindValue(":isbn", t_isbn->text());
+        query.bindValue(":keywords", "{" + t_keywords->text() + "}");
+
+        // Execute the query and close the database connection
+        query.exec();
         db.close();
 
+        // Close the window
         emit closedSignal();
     }
     catch(QString Err) {
