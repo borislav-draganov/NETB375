@@ -17,11 +17,14 @@ class searchWindow : public QWidget
 public:
     searchWindow();
     QPushButton *goButton;          // Search query button for the Search window
+    QPushButton *exportButton;      // Export button
+    QPushButton *deleteButton;      // Delete button
     QPushButton *s_cancelButton;    // Cancel button for the Search window
 
 public slots:
     void go();                      // Initiating the search querry
     void s_cancel();                // Cancel slot for the Search window
+    void delete_item();             // Delete the selected item
 
 signals:
     void closedSignal();

@@ -42,6 +42,8 @@ private:
     QLineEdit *t_pages;
     QLineEdit *t_isbn;
     QLineEdit *t_keywords;
+
+    bool is_valid_isbn(QString str); // A function that will check if the sublied string is a correct ISBN or ISSN
 };
 
 #endif // INSERTWINDOW_H

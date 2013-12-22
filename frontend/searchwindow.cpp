@@ -52,13 +52,24 @@ searchWindow::searchWindow()
     goButton->show();
     searchLayout->addWidget(goButton, 6, 0);
 
+    exportButton = new QPushButton(this);
+    exportButton->setText("Export");
+    exportButton->show();
+    searchLayout->addWidget(exportButton, 6, 1, Qt::AlignRight);
+
+    deleteButton = new QPushButton(this);
+    deleteButton->setText("Delete");
+    deleteButton->show();
+    searchLayout->addWidget(deleteButton, 6, 2);
+
     s_cancelButton = new QPushButton(this);
     s_cancelButton->setText("Cancel");
     s_cancelButton->show();
-    searchLayout->addWidget(s_cancelButton, 6, 2);
+    searchLayout->addWidget(s_cancelButton, 6, 3);
 
     // Connect Slots
     connect(goButton, SIGNAL(clicked()), this, SLOT(go()));
+    connect(deleteButton, SIGNAL(clicked()), this, SLOT(delete_item()));
     connect(s_cancelButton, SIGNAL(clicked()), this, SLOT(s_cancel()));
 }
 
@@ -78,6 +89,47 @@ void searchWindow::go()
     }
 }
 
+void searchWindow::delete_item()
+{
+    try
+    {
+        // Get the index of the currently selected row
+        int selected_row = output->selectionModel()->currentIndex().row();
+
+        // if it's -1 then no row is selected
+        if (selected_row < 0) {
+            throw QString("No row selected!");
+        }
+
+        // Get the isbn of the selected row
+        QString isbn = model->data(model->index(selected_row,5)).toString();
+
+        // Attempt to connect to the database and make a query
+        QSqlDatabase db = MainWindow::connectDB();
+        QSqlQuery query(db);
+
+        // Prepare the Query
+        query.prepare("SELECT * from dellBook(:isbn);");
+
+        // Bind the value
+        query.bindValue(":isbn", isbn);
+
+        // Execute the query and close the database connection
+        query.exec();
+
+        // Resend the last queyr used to make the model (repeat the search)
+        QString last_search = model->query().lastQuery();
+        model->setQuery(last_search);
+
+        // Close the connection
+        db.close();
+    }
+    catch(QString Err)
+    {
+        QMessageBox::critical(NULL, QObject::tr("Error"), Err);
+    }
+}
+
 void searchWindow::s_cancel()
 {
     emit closedSignal();
@@ -86,5 +138,6 @@ void searchWindow::s_cancel()
 // Emit a closedSignal
 void searchWindow::closeEvent(QCloseEvent *event)
 {
+    event->ignore();
     emit closedSignal();
 }

@@ -39,7 +39,7 @@ insertWindow::insertWindow() {
     insertLayout->addWidget(l_pages, 4, 0);
 
     l_isbn = new QLabel(this);
-    l_isbn->setText(tr("ISBN:"));
+    l_isbn->setText(tr("ISBN/ISSN:"));
     l_isbn->show();
     insertLayout->addWidget(l_isbn, 5, 0);
 
@@ -95,6 +95,40 @@ insertWindow::insertWindow() {
 
 void insertWindow::submit() {
     try {
+        // Check if all fields are filled in
+        if (t_title->text() == "" ||
+                t_author->text() == "" ||
+                t_magazine->text() == "" ||
+                t_year->text() == "" ||
+                t_pages->text() == "" ||
+                t_isbn->text() == "" ||
+                t_keywords->text() == "")
+        {
+            throw QString("Not all fields have been filled in!");
+        }
+
+        // Check if the inputed value for Year is a four digit number
+        QRegExp year_check("^\\d{4}$");
+        if (year_check.indexIn(t_year->text()) == -1) {
+            throw QString("Incorrect format for year! (YYYY)");
+        }
+
+        // Check if the inputed value for Pages is a number
+        QRegExp pages_check("^\\d+$");
+        if (pages_check.indexIn(t_pages->text()) == -1) {
+            throw QString("Pages must be a number!");
+        }
+
+        // Remove spaces and dashes from the ISBN/ISSN
+        QString isbn = t_isbn->text();
+        isbn.replace(" ", "");
+        isbn.replace("-", "");
+
+        // Check if the ISBN/ISSN is valid
+        if (!is_valid_isbn(isbn)) {
+            throw QString("Incorrect ISBN/ISSN!");
+        }
+
         // Attempt to connect to the database and make a query
         QSqlDatabase db = MainWindow::connectDB();
         QSqlQuery query(db);
@@ -108,7 +142,7 @@ void insertWindow::submit() {
         query.bindValue(":magazine", t_magazine->text());
         query.bindValue(":year", t_year->text());
         query.bindValue(":pages", t_pages->text());
-        query.bindValue(":isbn", t_isbn->text());
+        query.bindValue(":isbn", isbn);
         query.bindValue(":keywords", "{" + t_keywords->text() + "}");
 
         // Execute the query and close the database connection
@@ -129,7 +163,77 @@ void insertWindow::cancel() {
 }
 
 // Emit a closedSignal
-void insertWindow::closeEvent(QCloseEvent *event)
-{
+void insertWindow::closeEvent(QCloseEvent *event) {
+    event->ignore();
     emit closedSignal();
+}
+
+bool insertWindow::is_valid_isbn(QString str) {
+    str.toUpper();
+    // Make sure there are only digits or ends with an X (in case it's a ISSN)
+    QRegExp all_digit("^\\d+$");
+    QRegExp issn("^\\d+X$");
+    if (all_digit.indexIn(str) == -1 && issn.indexIn(str) == -1) {
+        return false;
+    }
+
+    //QMessageBox::critical(NULL, QObject::tr("Error"), str.mid(1,1));
+
+    // Check for a valid ISSN or ISBN-10
+    if (str.length() == 8 || str.length() == 10) {
+        int length = str.length();
+        int check_digit = 0;
+
+        // Sum the digits
+        for (int i = 0; i < length - 1; i++) {
+            check_digit += str.mid(i, 1).toInt() * (length-i);
+        }
+
+        // Modulus 11
+        check_digit = check_digit % 11;
+
+        // Remainder substracted from 11
+        check_digit = 11 - check_digit;
+
+        // If the last character is X, the check digit has to be 10
+        if (str.mid(length-1, 1) == "X") {
+            if (check_digit == 10) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        // Safely convert the last character into an integer
+        int last_digit = str.mid(length-1, 1).toInt();
+
+        // If the checksum before the substraction from 11 was 0, the final digit has to be 0
+        if (check_digit == 11 && last_digit == 0) {
+            return true;
+        }
+        // In all other cases, the last digit and the check_digit have to match
+        else if (check_digit == last_digit) {
+            return true;
+        }
+
+        return false;
+    }
+    // Check for a valid ISBN-13
+    else if (str.length() == 13) {
+        int check_digit = 0;
+
+        for (int i = 0; i < 13; i += 2) {
+            check_digit += str.mid(i, 1).toInt();
+        }
+
+        for (int i = 1; i < 12; i += 2) {
+            check_digit += str.mid(i, 1).toInt() * 3;
+        }
+
+        return check_digit % 10 == 0;
+    }
+
+    // Anything else is incorrect
+    return false;
 }
