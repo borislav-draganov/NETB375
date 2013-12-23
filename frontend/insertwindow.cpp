@@ -177,8 +177,6 @@ bool insertWindow::is_valid_isbn(QString str) {
         return false;
     }
 
-    //QMessageBox::critical(NULL, QObject::tr("Error"), str.mid(1,1));
-
     // Check for a valid ISSN or ISBN-10
     if (str.length() == 8 || str.length() == 10) {
         int length = str.length();
@@ -197,27 +195,18 @@ bool insertWindow::is_valid_isbn(QString str) {
 
         // If the last character is X, the check digit has to be 10
         if (str.mid(length-1, 1) == "X") {
-            if (check_digit == 10) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return check_digit == 10;
         }
 
         // Safely convert the last character into an integer
         int last_digit = str.mid(length-1, 1).toInt();
 
         // If the checksum before the substraction from 11 was 0, the final digit has to be 0
-        if (check_digit == 11 && last_digit == 0) {
-            return true;
+        if (check_digit == 11) {
+            return last_digit == 0;
         }
         // In all other cases, the last digit and the check_digit have to match
-        else if (check_digit == last_digit) {
-            return true;
-        }
-
-        return false;
+        return check_digit == last_digit;
     }
     // Check for a valid ISBN-13
     else if (str.length() == 13) {

@@ -1,4 +1,4 @@
-﻿/* 
+/* 
 All functions are created for use in "NETB375 Programing Practise" project for team 1.
 GitHub link: https://github.com/borislav-draganov/NETB375
 

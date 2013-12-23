@@ -15,8 +15,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     static QSqlDatabase connectDB();
 
-    //~MainWindow();
-
 public slots:
     void insertNew();               // A slot for creating a new "Insert" window
     void close_insert();            // A slot for closing an "Insert" window
