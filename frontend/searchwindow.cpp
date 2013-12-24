@@ -77,9 +77,53 @@ void searchWindow::go()
 {
     try
     {
+        // Connect to the base and make a query
         QSqlDatabase db = MainWindow::connectDB();
+        QSqlQuery query(db);
 
-        model->setQuery("SELECT * FROM \"Books\";");
+        if (author->isChecked())
+        {
+            if (sl_author->text() == "") { throw QString("Type author name to search"); }
+            else
+            {
+                // Prepare the query
+                query.prepare("SELECT * from searchByAuthor(:author);");
+
+                // Bind the value
+                query.bindValue(":author", "%" + sl_author->text() + "%");
+                query.exec();
+                model->setQuery(query);
+            }
+        }
+        else if (title->isChecked())
+        {
+            if (sl_title->text() == "") { throw QString("Type title name to search"); }
+            else
+            {
+                // Prepare the query
+                query.prepare("SELECT * from searchByTitle(:title);");
+
+                // Bind the value
+                query.bindValue(":title", "%" + sl_title->text() + "%");
+                query.exec();
+                model->setQuery(query);
+            }
+        }
+        else if (keyword->isChecked())
+        {
+            if (sl_keyword->text() == "") { throw QString("Type a keyword to search"); }
+            else
+            {
+                // Prepare the query
+                query.prepare("SELECT * from searchByKeyword(:keyword);");
+
+                // Bind the value
+                query.bindValue(":keyword", "%" + sl_keyword->text() + "%");
+                query.exec();
+                model->setQuery(query);
+            }
+        }
+        else { model->setQuery("Select * FROM \"Books\""); }
 
         db.close();
     }
