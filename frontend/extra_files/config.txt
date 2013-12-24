@@ -1,5 +1,5 @@
 HostName: 127.0.0.1
 Port: 5432
-DatabaseName: test
+DatabaseName: BookRepository
 UserName: postgres
 Password: postgres
