@@ -43,6 +43,9 @@ private:
 
     QSqlQueryModel *model;          // A model where the output of the database will be shown
     QTableView *output;             // A view where the output will be shown
+
+    QString bound_key;              // Store the key of the bound value of the last preprared statament (search)
+    QString bound_value;            // Store the value of the bound value of the last preprared statament (search)
 };
 
 #endif // SEARCHWINDOW_H

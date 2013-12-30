@@ -77,6 +77,9 @@ void searchWindow::go()
 {
     try
     {
+        // Clear the model, before the new search
+        model->clear();
+
         // Connect to the base and make a query
         QSqlDatabase db = MainWindow::connectDB();
         QSqlQuery query(db);
@@ -89,8 +92,12 @@ void searchWindow::go()
                 // Prepare the query
                 query.prepare("SELECT * from searchByAuthor(:author);");
 
+                // Save the bound key and value
+                bound_key = ":author";
+                bound_value = "%" + sl_author->text() + "%";
+
                 // Bind the value
-                query.bindValue(":author", "%" + sl_author->text() + "%");
+                query.bindValue(bound_key, bound_value);
                 query.exec();
                 model->setQuery(query);
             }
@@ -103,8 +110,12 @@ void searchWindow::go()
                 // Prepare the query
                 query.prepare("SELECT * from searchByTitle(:title);");
 
+                // Save the bound key and value
+                bound_key = ":title";
+                bound_value = "%" + sl_title->text() + "%";
+
                 // Bind the value
-                query.bindValue(":title", "%" + sl_title->text() + "%");
+                query.bindValue(bound_key, bound_value);
                 query.exec();
                 model->setQuery(query);
             }
@@ -117,8 +128,12 @@ void searchWindow::go()
                 // Prepare the query
                 query.prepare("SELECT * from searchByKeyword(:keyword);");
 
+                // Save the bound key and value
+                bound_key = ":keyword";
+                bound_value = "%" + sl_keyword->text() + "%";
+
                 // Bind the value
-                query.bindValue(":keyword", "%" + sl_keyword->text() + "%");
+                query.bindValue(bound_key, bound_value);
                 query.exec();
                 model->setQuery(query);
             }
@@ -148,6 +163,12 @@ void searchWindow::delete_item()
         // Get the isbn of the selected row
         QString isbn = model->data(model->index(selected_row,5)).toString();
 
+        // Save the last query used to make the model
+        QString last_search = model->query().lastQuery();
+
+        // Clear the model, before the new search
+        model->clear();
+
         // Attempt to connect to the database and make a query
         QSqlDatabase db = MainWindow::connectDB();
         QSqlQuery query(db);
@@ -161,9 +182,12 @@ void searchWindow::delete_item()
         // Execute the query and close the database connection
         query.exec();
 
-        // Resend the last queyr used to make the model (repeat the search)
-        QString last_search = model->query().lastQuery();
-        model->setQuery(last_search);
+        // Resend the last query (repeat the search)
+        query.prepare(last_search);
+        query.bindValue(bound_key, bound_value);
+        query.exec();
+
+        model->setQuery(query);
 
         // Close the connection
         db.close();
