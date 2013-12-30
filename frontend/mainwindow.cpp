@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Create and set a grid layout
     QGridLayout *mainLayout = new QGridLayout(this);
     setLayout(mainLayout);
-    resize(200, 300);
+    setFixedSize(200, 300);
 
     // Instantiate the buttons
     insertButton = new QPushButton(this);
@@ -40,7 +40,7 @@ void MainWindow::insertNew()
     // Open a window only if there isn't one already
     if(!new_item)
     {
-        new_item = new insertWindow;
+        new_item = new insertWindow(this);
         new_item->show();
 
         // Connect to the closing event of that window
@@ -61,7 +61,7 @@ void MainWindow::searchNew()
     // Open a window only if there isn't one already
     if (!new_search)
     {
-        new_search = new searchWindow;
+        new_search = new searchWindow(this);
         new_search->show();
 
         // Connet to the closing event of that window

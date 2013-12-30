@@ -12,7 +12,7 @@ class insertWindow : public QWidget
     Q_OBJECT
 
 public:
-    insertWindow();
+    insertWindow(QWidget *parent = 0);
     QPushButton *submitButton;
     QPushButton *cancelButton;
 
@@ -25,6 +25,7 @@ signals:
 
 protected:
     void closeEvent(QCloseEvent *event);    // An event which is called when the window is closed
+    void keyPressEvent(QKeyEvent* event);   // Check if keys are pressed - in this case it'll be the "Enter" keys
 
 private:
     QLabel *l_title;
@@ -43,7 +44,7 @@ private:
     QLineEdit *t_isbn;
     QLineEdit *t_keywords;
 
-    bool is_valid_isbn(QString str); // A function that will check if the sublied string is a correct ISBN or ISSN
+    bool is_valid_isbn(QString str);        // A function that will check if the suplied string is a correct ISBN or ISSN
 };
 
 #endif // INSERTWINDOW_H

@@ -4,12 +4,13 @@
 #include <QGridLayout>
 #include <QMessageBox>
 
-searchWindow::searchWindow()
-{
+searchWindow::searchWindow(QWidget *parent) :
+    QWidget(parent){
     // Create and set Grid Layout
     QGridLayout *searchLayout = new QGridLayout(this);
     setLayout(searchLayout);
     resize(800, 600);
+    setWindowFlags(Qt::Window);
 
     // Instantiate the Radio Buttons
     author = new QRadioButton(this);
@@ -208,4 +209,12 @@ void searchWindow::closeEvent(QCloseEvent *event)
 {
     event->ignore();
     emit closedSignal();
+}
+
+// If an "Enter" key is pressed, do the search
+void searchWindow::keyPressEvent(QKeyEvent* event)
+{
+    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        go();
+    }
 }

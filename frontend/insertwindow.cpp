@@ -5,12 +5,14 @@
 #include <QMessageBox>
 #include <QtSql>
 
-insertWindow::insertWindow() {
+insertWindow::insertWindow(QWidget *parent) :
+    QWidget(parent){
 
     // Create and set a Grid Layout
     QGridLayout *insertLayout = new QGridLayout(this);
     setLayout(insertLayout);
     resize(200, 500);
+    setWindowFlags(Qt::Window);
 
     // Instantiate the Labels
     l_title = new QLabel(this);
@@ -166,6 +168,14 @@ void insertWindow::cancel() {
 void insertWindow::closeEvent(QCloseEvent *event) {
     event->ignore();
     emit closedSignal();
+}
+
+// If an "Enter" key is pressed, do the insertion
+void insertWindow::keyPressEvent(QKeyEvent* event)
+{
+    if(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        submit();
+    }
 }
 
 bool insertWindow::is_valid_isbn(QString str) {

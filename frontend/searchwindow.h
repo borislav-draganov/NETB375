@@ -15,7 +15,7 @@ class searchWindow : public QWidget
     Q_OBJECT
 
 public:
-    searchWindow();
+    searchWindow(QWidget *parent = 0);
     QPushButton *goButton;          // Search query button for the Search window
     QPushButton *exportButton;      // Export button
     QPushButton *deleteButton;      // Delete button
@@ -31,6 +31,7 @@ signals:
 
 protected:
     void closeEvent(QCloseEvent *event);    // An event which is called when the window is closed
+    void keyPressEvent(QKeyEvent* event);   // Check if keys are pressed - in this case it'll be the "Enter" keys
 
 private:
     QRadioButton *author;
