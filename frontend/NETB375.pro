@@ -20,5 +20,3 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     insertwindow.h \
     searchwindow.h
-
-FORMS    += mainwindow.ui

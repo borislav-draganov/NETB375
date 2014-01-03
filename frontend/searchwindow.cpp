@@ -112,7 +112,7 @@ void searchWindow::go()
 
         if (author->isChecked())
         {
-            if (sl_author->text() == "") { throw QString("Type author name to search"); }
+            if (sl_author->text() == "") { model->setQuery("Select * FROM \"Books\""); }
             else
             {
                 // Prepare the query
@@ -130,7 +130,7 @@ void searchWindow::go()
         }
         else if (title->isChecked())
         {
-            if (sl_title->text() == "") { throw QString("Type title name to search"); }
+            if (sl_title->text() == "") { model->setQuery("Select * FROM \"Books\""); }
             else
             {
                 // Prepare the query
@@ -148,7 +148,7 @@ void searchWindow::go()
         }
         else if (keyword->isChecked())
         {
-            if (sl_keyword->text() == "") { throw QString("Type a keyword to search"); }
+            if (sl_keyword->text() == "") { model->setQuery("Select * FROM \"Books\""); }
             else
             {
                 // Prepare the query
