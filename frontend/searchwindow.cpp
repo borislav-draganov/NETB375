@@ -45,7 +45,7 @@ searchWindow::searchWindow(QWidget *parent) :
     model = new QSqlQueryModel(this);
     output = new QTableView(this);
     output->setModel(model);
-    searchLayout->addWidget(output, 3, 0, 3, 4);
+    searchLayout->addWidget(output, 3, 0, 3, 5);
 
     // Instantiate the Push Buttons
     goButton = new QPushButton(this);
@@ -58,20 +58,45 @@ searchWindow::searchWindow(QWidget *parent) :
     exportButton->show();
     searchLayout->addWidget(exportButton, 6, 1, Qt::AlignRight);
 
+    exportAllButton = new QPushButton(this);
+    exportAllButton->setText("Export All");
+    exportAllButton->show();
+    searchLayout->addWidget(exportAllButton, 6, 2);
+
     deleteButton = new QPushButton(this);
     deleteButton->setText("Delete");
     deleteButton->show();
-    searchLayout->addWidget(deleteButton, 6, 2);
+    searchLayout->addWidget(deleteButton, 6, 3);
 
     s_cancelButton = new QPushButton(this);
     s_cancelButton->setText("Cancel");
     s_cancelButton->show();
-    searchLayout->addWidget(s_cancelButton, 6, 3);
+    searchLayout->addWidget(s_cancelButton, 6, 4);
 
     // Connect Slots
     connect(goButton, SIGNAL(clicked()), this, SLOT(go()));
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(delete_item()));
     connect(s_cancelButton, SIGNAL(clicked()), this, SLOT(s_cancel()));
+    connect(exportButton, SIGNAL(clicked()), this, SLOT(export_item()));
+    connect(exportAllButton, SIGNAL(clicked()), this, SLOT(exportAll()));
+    connect(sl_author, SIGNAL(textEdited(QString)),this, SLOT(checkAuthor()));
+    connect(sl_title, SIGNAL(textEdited(QString)),this, SLOT(checkTitle()));
+    connect(sl_keyword, SIGNAL(textEdited(QString)),this, SLOT(checkKeyword()));
+}
+
+void searchWindow::checkAuthor()
+{
+    author->click();
+}
+
+void searchWindow::checkTitle()
+{
+    title->click();
+}
+
+void searchWindow::checkKeyword()
+{
+    keyword->click();
 }
 
 void searchWindow::go()
@@ -142,6 +167,109 @@ void searchWindow::go()
         else { model->setQuery("Select * FROM \"Books\""); }
 
         db.close();
+    }
+    catch(QString Err)
+    {
+        QMessageBox::critical(NULL, QObject::tr("Error"), Err);
+    }
+}
+
+void searchWindow::export_item()
+{
+    try
+    {
+        // Create and save the file
+        QString filename = QFileDialog::getSaveFileName(this, "Save File", "", "BiBTeX (*.bib)");
+        QFile exportFile(filename);
+        if (!exportFile.open(QFile::WriteOnly | QFile::Text))
+        {
+            QMessageBox::information(this, "Error opening file", "Unable to open the file");
+            return;
+        }
+
+        // Get the index of the currently selected row
+        int selected_row = output->selectionModel()->currentIndex().row();
+
+        // if it's -1 then no row is selected
+        if (selected_row < 0)
+        {
+            throw QString("No row selected!");
+        }
+
+        // Collect the data and prepare it for exporting
+        QString title = model->data(model->index(selected_row, 0)).toString();
+        QString author = model->data(model->index(selected_row, 1)).toString();
+        QString magazine = model->data(model->index(selected_row, 2)).toString();
+        QString year = model->data(model->index(selected_row, 3)).toString();
+        QString pages = model->data(model->index(selected_row, 4)).toString();
+        QString isbn = model->data(model->index(selected_row, 5)).toString();
+        QString keywords = model->data(model->index(selected_row, 6)).toString();
+
+        QString input = "@misc{ exporting, title = " + title + ","
+                + " author = " + author + ","
+                + " magazine = " + magazine + ","
+                + " year = " + year + ","
+                + " pages = " + pages + ","
+                + " isbn = " + isbn + ","
+                + " keywords = " + keywords + "}";
+
+        // Write the data into the file
+        QTextStream out(&exportFile);
+        out << input;
+
+        // Flushing and closing
+        exportFile.flush();
+        exportFile.close();
+    }
+    catch(QString Err)
+    {
+        QMessageBox::critical(NULL, QObject::tr("Error"), Err);
+    }
+}
+
+void searchWindow::exportAll()
+{
+    try
+    {
+        // Create and save the file
+        QString filename = QFileDialog::getSaveFileName(this, "Save File", "", "BiBTeX (*.bib)");
+        QFile exportFile(filename);
+        if (!exportFile.open(QFile::WriteOnly | QFile::Text))
+        {
+            QMessageBox::information(this, "Error opening file", "Unable to open the file");
+            return;
+        }
+
+        // Get the count of the rows
+        int row_count = model->rowCount();
+
+        // Collect the data and prepare it for exporting
+        for (int row = 0; row < row_count; row++)
+        {
+            QString title = model->data(model->index(row, 0)).toString();
+            QString author = model->data(model->index(row, 1)).toString();
+            QString magazine = model->data(model->index(row, 2)).toString();
+            QString year = model->data(model->index(row, 3)).toString();
+            QString pages = model->data(model->index(row, 4)).toString();
+            QString isbn = model->data(model->index(row, 5)).toString();
+            QString keywords = model->data(model->index(row, 6)).toString();
+
+            QString input = "@misc{ exporting, title = " + title + ","
+                    + " author = " + author + ","
+                    + " magazine = " + magazine + ","
+                    + " year = " + year + ","
+                    + " pages = " + pages + ","
+                    + " isbn = " + isbn + ","
+                    + " keywords = " + keywords + "}" + '\n';
+
+            // Write the data into the file
+            QTextStream out(&exportFile);
+            out << input;
+        }
+
+        // Flushing and closing
+        exportFile.flush();
+        exportFile.close();
     }
     catch(QString Err)
     {
