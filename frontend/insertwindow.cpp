@@ -151,8 +151,18 @@ void insertWindow::submit() {
         query.exec();
         db.close();
 
-        // Close the window
-        emit closedSignal();
+        // Check the result
+        query.next();
+
+        if(query.value(0).toInt() == 0) {
+            QMessageBox::critical(NULL, QObject::tr("Error"), "The supplied ISSN/ISBN already exists in the database! Did not insert!");
+        }
+        else if(query.value(0).toInt() == 1) {
+            QMessageBox::information(NULL, QObject::tr("Error"), "Insert successful!");
+
+            // Close the window
+            emit closedSignal();
+        }
     }
     catch(QString Err) {
         QMessageBox::critical(NULL, QObject::tr("Error"), Err);

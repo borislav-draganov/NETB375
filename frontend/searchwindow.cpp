@@ -308,8 +308,18 @@ void searchWindow::delete_item()
         // Bind the value
         query.bindValue(":isbn", isbn);
 
-        // Execute the query and close the database connection
+        // Execute the query to delete the item
         query.exec();
+
+        // Check the result
+        query.next();
+
+        if(query.value(0).toInt() == 0) {
+            QMessageBox::critical(NULL, QObject::tr("Error"), "The item was not deleted!");
+        }
+        else if(query.value(0).toInt() == 1) {
+            QMessageBox::information(NULL, QObject::tr("Error"), "Delete successful!");
+        }
 
         // Resend the last query (repeat the search)
         query.prepare(last_search);
