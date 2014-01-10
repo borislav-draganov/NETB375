@@ -155,17 +155,17 @@ void insertWindow::submit() {
         query.next();
 
         if(query.value(0).toInt() == 0) {
-            QMessageBox::critical(NULL, QObject::tr("Error"), "The supplied ISSN/ISBN already exists in the database! Did not insert!");
+            QMessageBox::critical(this, QObject::tr("Error"), "The supplied ISSN/ISBN already exists in the database! Did not insert!");
         }
         else if(query.value(0).toInt() == 1) {
-            QMessageBox::information(NULL, QObject::tr("Error"), "Insert successful!");
+            QMessageBox::information(this, QObject::tr("Success"), "Insert successful!");
 
             // Close the window
             emit closedSignal();
         }
     }
     catch(QString Err) {
-        QMessageBox::critical(NULL, QObject::tr("Error"), Err);
+        QMessageBox::critical(this, QObject::tr("Error"), Err);
     }
 }
 

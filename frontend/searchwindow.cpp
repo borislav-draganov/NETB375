@@ -170,7 +170,7 @@ void searchWindow::go()
     }
     catch(QString Err)
     {
-        QMessageBox::critical(NULL, QObject::tr("Error"), Err);
+        QMessageBox::critical(this, QObject::tr("Error"), Err);
     }
 }
 
@@ -223,7 +223,7 @@ void searchWindow::export_item()
     }
     catch(QString Err)
     {
-        QMessageBox::critical(NULL, QObject::tr("Error"), Err);
+        QMessageBox::critical(this, QObject::tr("Error"), Err);
     }
 }
 
@@ -273,7 +273,7 @@ void searchWindow::exportAll()
     }
     catch(QString Err)
     {
-        QMessageBox::critical(NULL, QObject::tr("Error"), Err);
+        QMessageBox::critical(this, QObject::tr("Error"), Err);
     }
 }
 
@@ -315,10 +315,10 @@ void searchWindow::delete_item()
         query.next();
 
         if(query.value(0).toInt() == 0) {
-            QMessageBox::critical(NULL, QObject::tr("Error"), "The item was not deleted!");
+            QMessageBox::critical(this, QObject::tr("Error"), "The item was not deleted!");
         }
         else if(query.value(0).toInt() == 1) {
-            QMessageBox::information(NULL, QObject::tr("Error"), "Delete successful!");
+            QMessageBox::information(this, QObject::tr("Success"), "Delete successful!");
         }
 
         // Resend the last query (repeat the search)
@@ -333,7 +333,7 @@ void searchWindow::delete_item()
     }
     catch(QString Err)
     {
-        QMessageBox::critical(NULL, QObject::tr("Error"), Err);
+        QMessageBox::critical(this, QObject::tr("Error"), Err);
     }
 }
 
