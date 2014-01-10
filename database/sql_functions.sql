@@ -123,12 +123,11 @@ create or replace view selectBook as select * from "Books";
 
 /* 
 ****************************************************************************************************************************************************************
-********								Insert data v.0.6								********
+********								Insert data v.1.0								********
 ******** 					!!!Please note that this function still requires additional updates!!!					********
-******** To be added:																	********
-******** 	1) Function should return 1 on successfull insert and 0 when the data already exists (checking by ISBN as unique).			********
 ********																		********
 ******** This function should be called when a new data is to be inserted in the database.								********
+******** Function return 1 on successfull insert and 0 when the data already exists (checking by ISBN as unique).					********
 ******** Function usage:																********
 ********	SELECT * from fillBook('Title','Author','Magazine',Year_INT,Pages_INT,'ISBN','{keyword1,keyword2,keywordX}');				********
 ******** Please note the way keywords are entered! The expected format is '{keyword,keyword}'. If no keywords are provided use '{}'. Each keyword is 	********
@@ -143,9 +142,15 @@ create or replace view selectBook as select * from "Books";
 ****************************************************************************************************************************************************************
 */
 
-CREATE or REPLACE FUNCTION fillBook(_Title text, _Author text, _Magazine text, _Year int, _Pages int, _ISBN text, _Keywords text[]) RETURNS void AS $$
+drop function fillBook(text, text, text, int, int, text, text[]);
+
+CREATE or REPLACE FUNCTION fillBook(_Title text, _Author text, _Magazine text, _Year int, _Pages int, _ISBN text, _Keywords text[]) RETURNS integer AS $$
     BEGIN
-	INSERT INTO "Books" VALUES (_Title, _Author, _Magazine, _Year, _Pages, _ISBN, _Keywords);
+	IF EXISTS(select "ISBN" from "Books" where "ISBN" = _ISBN) then
+		return 0;
+	else INSERT INTO "Books" VALUES (_Title, _Author, _Magazine, _Year, _Pages, _ISBN, _Keywords);
+	return 1;
+	end if;
     END;
 $$ LANGUAGE plpgsql;
 
@@ -161,12 +166,11 @@ $$ LANGUAGE plpgsql;
 
 /* 
 ****************************************************************************************************************************************************************
-********								Delete data row v.0.4								********
-******** 					!!!Please note that this function still requires additional updates!!!					********
-******** To be added:																	********
-******** 	1) Function should return 1 on successfull delete and 0 when the delete has failed.							********
+********								Delete data row v.1.0								********
+******** 																		********
 ********																		********
 ******** This function should be called when an existing data is to be deleted from the database. Function uses the ISBN to uniquely identify the data.	********
+******** The function return 1 or 0 depending if the entry already exists or not.									********
 ******** Function usage:																********
 ********	SELECT * from dellBook('ISBN');														********
 ******** Where ISBN is the actual ISBN of the data that is to be deleted.									 	********
@@ -176,16 +180,21 @@ $$ LANGUAGE plpgsql;
 ********																		********
 ******** Don't forget the semicolon at the end of the statement!											********
 ********																		********
-******** At the moment this function returns void. Further revision will update the function to return 1 or 0 depending if the entry already exists.	********
 ****************************************************************************************************************************************************************
 */
 
+DROP FUNCTION dellbook(text);
 
-create or replace function dellBook(_ISBN text) returns void as $$
-	begin
-		delete from "Books" where "ISBN" = _ISBN;
-	end;
+create or replace function dellBook(_ISBN text) returns integer as $$
+	BEGIN
+		IF EXISTS(select "ISBN" from "Books" where "ISBN" = _ISBN) then
+			delete from "Books" where "ISBN" = _ISBN;
+		else return 0;
+		end if;
+		return 1;
+	END;
 $$ language plpgsql;
+
 
 
 /* 								END OF DELETE FUNCTIONS SECTION								 	 */
