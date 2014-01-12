@@ -30,9 +30,9 @@ public slots:
     void delete_item();             // Delete the selected item
     void export_item();             // Exports only the selected row
     void exportAll();               // Exports all results
-    void checkAuthor();               // Checks the Author button when text typed into the line edit
-    void checkTitle();                // Checks the Title button when text typed into the line edit
-    void checkKeyword();              // Checks the Keyword button when text typed into the line edit
+    void checkAuthor();             // Checks the Author button when text typed into the line edit
+    void checkTitle();              // Checks the Title button when text typed into the line edit
+    void checkKeyword();            // Checks the Keyword button when text typed into the line edit
 
 signals:
     void closedSignal();

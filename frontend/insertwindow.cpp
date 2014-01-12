@@ -197,8 +197,8 @@ bool insertWindow::is_valid_isbn(QString str) {
         return false;
     }
 
-    // Check for a valid ISSN or ISBN-10
-    if (str.length() == 8 || str.length() == 10) {
+    // Check for a valid ISSN
+    if (str.length() == 8) {
         int length = str.length();
         int check_digit = 0;
 
@@ -227,6 +227,26 @@ bool insertWindow::is_valid_isbn(QString str) {
         }
         // In all other cases, the last digit and the check_digit have to match
         return check_digit == last_digit;
+    }
+    // Check for a valid ISBN-10
+    else if (str.length() == 10) {
+        int length = str.length();
+        int check_digit = 0;
+
+        // Sum the digits
+        for (int i = 0; i < length - 1; i++) {
+            check_digit += str.mid(i, 1).toInt() * (length-i);
+        }
+
+        if (str.mid(length-1, 1) == "X") {
+            check_digit += 10;
+        }
+        else {
+            check_digit += str.mid(length-1, 1).toInt();
+        }
+
+        // Modulus 11
+        return check_digit % 11 == 0;
     }
     // Check for a valid ISBN-13
     else if (str.length() == 13) {

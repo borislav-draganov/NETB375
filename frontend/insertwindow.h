@@ -17,11 +17,11 @@ public:
     QPushButton *cancelButton;
 
 public slots:
-    void submit();
-    void cancel();
+    void submit();                          // Insert an entry into the database
+    void cancel();                          // Close without inserting
 
 signals:
-    void closedSignal();                    // A singal that is emited when the window is closed
+    void closedSignal();                    // A signal that is emited when the window is closed
 
 protected:
     void closeEvent(QCloseEvent *event);    // An event which is called when the window is closed
@@ -44,7 +44,7 @@ private:
     QLineEdit *t_isbn;
     QLineEdit *t_keywords;
 
-    bool is_valid_isbn(QString str);        // A function that will check if the suplied string is a correct ISBN or ISSN
+    bool is_valid_isbn(QString str);        // A function that will check if the supplied string is a correct ISBN or ISSN
 };
 
 #endif // INSERTWINDOW_H
