@@ -180,6 +180,10 @@ void searchWindow::export_item()
     {
         // Create and save the file
         QString filename = QFileDialog::getSaveFileName(this, "Save File", "", "BiBTeX (*.bib)");
+
+        // Check if filename is empty (i.e. Cancel is pressed)
+        if (filename == "") { return; }
+
         QFile exportFile(filename);
         if (!exportFile.open(QFile::WriteOnly | QFile::Text))
         {
@@ -233,6 +237,10 @@ void searchWindow::exportAll()
     {
         // Create and save the file
         QString filename = QFileDialog::getSaveFileName(this, "Save File", "", "BiBTeX (*.bib)");
+
+        // Check if filename is empty (i.e. Cancel is pressed)
+        if (filename == "") { return; }
+
         QFile exportFile(filename);
         if (!exportFile.open(QFile::WriteOnly | QFile::Text))
         {
