@@ -25,7 +25,7 @@ public:
     QPushButton *s_cancelButton;    // Cancel button for the Search window
 
 public slots:
-    void go();                      // Initiating the search querry
+    void go();                      // Initiating the search query
     void s_cancel();                // Cancel slot for the Search window
     void delete_item();             // Delete the selected item
     void export_item();             // Exports only the selected row
@@ -53,8 +53,8 @@ private:
     QSqlQueryModel *model;          // A model where the output of the database will be shown
     QTableView *output;             // A view where the output will be shown
 
-    QString bound_key;              // Store the key of the bound value of the last preprared statament (search)
-    QString bound_value;            // Store the value of the bound value of the last preprared statament (search)
+    QString bound_key;              // Store the key of the bound value of the last prepared statement (search)
+    QString bound_value;            // Store the value of the bound value of the last prepared statement (search)
 };
 
 #endif // SEARCHWINDOW_H

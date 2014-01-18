@@ -21,7 +21,7 @@ public slots:
     void cancel();                          // Close without inserting
 
 signals:
-    void closedSignal();                    // A signal that is emited when the window is closed
+    void closedSignal();                    // A signal that is emitted when the window is closed
 
 protected:
     void closeEvent(QCloseEvent *event);    // An event which is called when the window is closed

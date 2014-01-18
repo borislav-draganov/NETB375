@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QMessageBox>
 
+// Constructor
 searchWindow::searchWindow(QWidget *parent) :
     QWidget(parent){
     // Create and set Grid Layout
@@ -84,21 +85,25 @@ searchWindow::searchWindow(QWidget *parent) :
     connect(sl_keyword, SIGNAL(textEdited(QString)),this, SLOT(checkKeyword()));
 }
 
+// Checks the Author button when text typed into the line edit
 void searchWindow::checkAuthor()
 {
     author->click();
 }
 
+// Checks the Title button when text typed into the line edit
 void searchWindow::checkTitle()
 {
     title->click();
 }
 
+// Checks the Keyword button when text typed into the line edit
 void searchWindow::checkKeyword()
 {
     keyword->click();
 }
 
+// Performs the search by the given criteria
 void searchWindow::go()
 {
     try
@@ -174,6 +179,7 @@ void searchWindow::go()
     }
 }
 
+// Exports a single row as a BiBTeX entry
 void searchWindow::export_item()
 {
     try
@@ -231,6 +237,7 @@ void searchWindow::export_item()
     }
 }
 
+// Exports all rows as a BiBTeX entry
 void searchWindow::exportAll()
 {
     try
@@ -285,6 +292,7 @@ void searchWindow::exportAll()
     }
 }
 
+// Deletes the selected row from the database
 void searchWindow::delete_item()
 {
     try
@@ -345,12 +353,13 @@ void searchWindow::delete_item()
     }
 }
 
+// Close the window when the "Cancel" button is pressed
 void searchWindow::s_cancel()
 {
     emit closedSignal();
 }
 
-// Emit a closedSignal
+// Emit a closedSignal - when the window is closed from the corner button
 void searchWindow::closeEvent(QCloseEvent *event)
 {
     event->ignore();

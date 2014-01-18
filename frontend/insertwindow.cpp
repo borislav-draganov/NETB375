@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QtSql>
 
+// Constructor
 insertWindow::insertWindow(QWidget *parent) :
     QWidget(parent){
 
@@ -95,6 +96,7 @@ insertWindow::insertWindow(QWidget *parent) :
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
 }
 
+// Performs a validation of the user-input and if correct- insert the data into the database
 void insertWindow::submit() {
     try {
         // Check if all fields are filled in
@@ -169,12 +171,12 @@ void insertWindow::submit() {
     }
 }
 
-// Emit a closedSignal
+// Emit a closedSignal - when the Close button is pressed
 void insertWindow::cancel() {
     emit closedSignal();
 }
 
-// Emit a closedSignal
+// Emit a closedSignal - when the window is closed from the corner button
 void insertWindow::closeEvent(QCloseEvent *event) {
     event->ignore();
     emit closedSignal();
@@ -188,6 +190,10 @@ void insertWindow::keyPressEvent(QKeyEvent* event)
     }
 }
 
+/* Check if the given string of digits is a valid ISSN, ISBN-10 or ISBN-13
+ * @param: string of digits only
+ * @return: true if it's correct, false if not
+ */
 bool insertWindow::is_valid_isbn(QString str) {
     str.toUpper();
     // Make sure there are only digits or ends with an X (in case it's a ISSN)
@@ -210,7 +216,7 @@ bool insertWindow::is_valid_isbn(QString str) {
         // Modulus 11
         check_digit = check_digit % 11;
 
-        // Remainder substracted from 11
+        // Remainder subtracted from 11
         check_digit = 11 - check_digit;
 
         // If the last character is X, the check digit has to be 10
@@ -221,7 +227,7 @@ bool insertWindow::is_valid_isbn(QString str) {
         // Safely convert the last character into an integer
         int last_digit = str.mid(length-1, 1).toInt();
 
-        // If the checksum before the substraction from 11 was 0, the final digit has to be 0
+        // If the checksum before the subtraction from 11 was 0, the final digit has to be 0
         if (check_digit == 11) {
             return last_digit == 0;
         }

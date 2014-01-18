@@ -76,6 +76,10 @@ void MainWindow::close_search()
     new_search = NULL;
 }
 
+/* Opens a connection to the database, using a config.txt file
+ * 
+ * @return: a connection to the database (QSqlDatabase), already opened
+ */
 QSqlDatabase MainWindow::connectDB() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
 
