@@ -311,49 +311,60 @@ void searchWindow::delete_item()
             throw QString("No row selected!");
         }
 
-        // Get the isbn of the selected row
+        // Get the ISSN/ISBN and name of the selected row
         QString isbn = model->data(model->index(selected_row,5)).toString();
+        QString name = model->data(model->index(selected_row,0)).toString();
 
-        // Save the last query used to make the model
-        QString last_search = model->query().lastQuery();
+        // Ask the user if he/she is sure
+        QMessageBox promptBox(this);
+        promptBox.setWindowTitle("Confirm delete");
+        promptBox.setText("Are you sure you want to delete " + name + " (ISBN/ISSN: " + isbn + ")?");
+        promptBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        promptBox.setDefaultButton(QMessageBox::Yes);
+        int answer = promptBox.exec();
 
-        // Clear the model, before the new search
-        model->clear();
+        // If the user is sure, continue
+        if (answer == QMessageBox::Yes) {
+            // Save the last query used to make the model
+            QString last_search = model->query().lastQuery();
 
-        // Attempt to connect to the database and make a query
-        QSqlDatabase db = MainWindow::connectDB();
-        QSqlQuery query(db);
+            // Clear the model, before the new search
+            model->clear();
 
-        // Prepare the Query
-        query.prepare("SELECT * from dellBook(:isbn);");
+            // Attempt to connect to the database and make a query
+            QSqlDatabase db = MainWindow::connectDB();
+            QSqlQuery query(db);
 
-        // Bind the value
-        query.bindValue(":isbn", isbn);
+            // Prepare the Query
+            query.prepare("SELECT * from dellBook(:isbn);");
 
-        // Execute the query to delete the item
-        query.exec();
+            // Bind the value
+            query.bindValue(":isbn", isbn);
 
-        // Check the result
-        query.next();
+            // Execute the query to delete the item
+            query.exec();
 
-        if(query.value(0).toInt() == 0) {
-            QMessageBox::critical(this, QObject::tr("Error"), "The item was not deleted!");
+            // Check the result
+            query.next();
+
+            if(query.value(0).toInt() == 0) {
+                QMessageBox::critical(this, QObject::tr("Error"), "The item was not deleted!");
+            }
+            else if(query.value(0).toInt() == 1) {
+                QMessageBox::information(this, QObject::tr("Success"), "Delete successful!");
+            }
+
+            // Resend the last query (repeat the search)
+            query.prepare(last_search);
+            query.bindValue(bound_key, bound_value);
+            query.exec();
+
+            model->setQuery(query);
+
+            // Close the connection
+            db.close();
         }
-        else if(query.value(0).toInt() == 1) {
-            QMessageBox::information(this, QObject::tr("Success"), "Delete successful!");
-        }
-
-        // Resend the last query (repeat the search)
-        query.prepare(last_search);
-        query.bindValue(bound_key, bound_value);
-        query.exec();
-
-        model->setQuery(query);
-
-        // Close the connection
-        db.close();
     }
-    // Display the error if there is such
     catch(QString Err)
     {
         QMessageBox::critical(this, QObject::tr("Error"), Err);

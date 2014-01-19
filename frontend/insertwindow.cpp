@@ -96,7 +96,7 @@ insertWindow::insertWindow(QWidget *parent) :
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
 }
 
-// Performs a validation of the user-input and if correct- insert the data into the database
+// Performs a validation of the user-input and if it's correct - insert the data into the database
 void insertWindow::submit() {
     try {
         // Check if all fields are filled in
@@ -111,13 +111,13 @@ void insertWindow::submit() {
             throw QString("Not all fields have been filled in!");
         }
 
-        // Check if the inputed value for Year is a four digit number
+        // Check if the input value for Year is a four digit number
         QRegExp year_check("^\\d{4}$");
         if (year_check.indexIn(t_year->text()) == -1) {
             throw QString("Incorrect format for year! (YYYY)");
         }
 
-        // Check if the inputed value for Pages is a number
+        // Check if the input value for Pages is a number
         QRegExp pages_check("^\\d+$");
         if (pages_check.indexIn(t_pages->text()) == -1) {
             throw QString("Pages must be a number!");
@@ -156,6 +156,7 @@ void insertWindow::submit() {
         // Check the result
         query.next();
 
+		// Notify the user of the result
         if(query.value(0).toInt() == 0) {
             QMessageBox::critical(this, QObject::tr("Error"), "The supplied ISSN/ISBN already exists in the database! Did not insert!");
         }
@@ -196,8 +197,10 @@ void insertWindow::keyPressEvent(QKeyEvent* event)
  * @return: true if it's correct, false if not
  */
 bool insertWindow::is_valid_isbn(QString str) {
+	// In case the user inputs an ISSN or ISBN-10 with a small "x"
     str.toUpper();
-    // Make sure there are only digits or ends with an X (in case it's a ISSN)
+	
+    // Make sure there are only digits or ends with an X (in case it's a ISSN or ISBN-10)
     QRegExp all_digit("^\\d+$");
     QRegExp issn("^\\d+X$");
     if (all_digit.indexIn(str) == -1 && issn.indexIn(str) == -1) {

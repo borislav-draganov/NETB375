@@ -13,7 +13,7 @@ class MainWindow : public QWidget
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    static QSqlDatabase connectDB();
+    static QSqlDatabase connectDB();	// A static function to be called when an open connection to the database is needed
 
 public slots:
     void insertNew();               // A slot for creating a new "Insert" window

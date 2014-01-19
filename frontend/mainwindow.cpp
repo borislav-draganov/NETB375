@@ -64,7 +64,7 @@ void MainWindow::searchNew()
         new_search = new searchWindow(this);
         new_search->show();
 
-        // Connet to the closing event of that window
+        // Connect to the closing event of that window
         connect(new_search, SIGNAL(closedSignal()), this, SLOT(close_search()));
     }
 }
@@ -118,13 +118,14 @@ QSqlDatabase MainWindow::connectDB() {
     data = line.split(" ");
     db.setPassword(data.at(1).toLocal8Bit().constData());
 
-    // Close the file and open a connection
+    // Close the file and 
     file.close();
 
+	// Try to open the connection - if it fails report the error
     if(!db.open()) {
-        //throw QString("Could not open a connection to the database!");
         throw QString(db.lastError().text());
     }
 
+	// If everything is successful return the opened connection
     return db;
 }
