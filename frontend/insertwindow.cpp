@@ -166,6 +166,7 @@ void insertWindow::submit() {
             emit closedSignal();
         }
     }
+    // Display the error if there is such
     catch(QString Err) {
         QMessageBox::critical(this, QObject::tr("Error"), Err);
     }

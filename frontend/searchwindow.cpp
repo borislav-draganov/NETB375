@@ -5,8 +5,8 @@
 #include <QMessageBox>
 
 // Constructor
-searchWindow::searchWindow(QWidget *parent) :
-    QWidget(parent){
+searchWindow::searchWindow(QWidget *parent) : QWidget(parent)
+{
     // Create and set Grid Layout
     QGridLayout *searchLayout = new QGridLayout(this);
     setLayout(searchLayout);
@@ -103,7 +103,7 @@ void searchWindow::checkKeyword()
     keyword->click();
 }
 
-// Performs the search by the given criteria
+// Performs the search by the given criteria, if there is a match, it is displayed in the window
 void searchWindow::go()
 {
     try
@@ -115,6 +115,7 @@ void searchWindow::go()
         QSqlDatabase db = MainWindow::connectDB();
         QSqlQuery query(db);
 
+        // Checks if the button for searching by author is checked, if it is, the searching is made by author
         if (author->isChecked())
         {
             if (sl_author->text() == "") { model->setQuery("Select * FROM \"Books\""); }
@@ -133,6 +134,7 @@ void searchWindow::go()
                 model->setQuery(query);
             }
         }
+        // Checks if the button for searching by title is checked, if it is, the searching is made by title
         else if (title->isChecked())
         {
             if (sl_title->text() == "") { model->setQuery("Select * FROM \"Books\""); }
@@ -151,6 +153,7 @@ void searchWindow::go()
                 model->setQuery(query);
             }
         }
+        // Checks if the keyword for searching by author is checked, if it is, the searching is made by keyword
         else if (keyword->isChecked())
         {
             if (sl_keyword->text() == "") { model->setQuery("Select * FROM \"Books\""); }
@@ -173,6 +176,7 @@ void searchWindow::go()
 
         db.close();
     }
+    // Display the error if there is such
     catch(QString Err)
     {
         QMessageBox::critical(this, QObject::tr("Error"), Err);
@@ -231,6 +235,7 @@ void searchWindow::export_item()
         exportFile.flush();
         exportFile.close();
     }
+    // Display the error if there is such
     catch(QString Err)
     {
         QMessageBox::critical(this, QObject::tr("Error"), Err);
@@ -286,6 +291,7 @@ void searchWindow::exportAll()
         exportFile.flush();
         exportFile.close();
     }
+    // Display the error if there is such
     catch(QString Err)
     {
         QMessageBox::critical(this, QObject::tr("Error"), Err);
@@ -347,6 +353,7 @@ void searchWindow::delete_item()
         // Close the connection
         db.close();
     }
+    // Display the error if there is such
     catch(QString Err)
     {
         QMessageBox::critical(this, QObject::tr("Error"), Err);

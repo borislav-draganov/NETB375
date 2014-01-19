@@ -35,7 +35,7 @@ public slots:
     void checkKeyword();            // Checks the Keyword button when text typed into the line edit
 
 signals:
-    void closedSignal();
+    void closedSignal();            // A signal that is emitted when the window is closed
 
 protected:
     void closeEvent(QCloseEvent *event);    // An event which is called when the window is closed
